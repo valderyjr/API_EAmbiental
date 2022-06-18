@@ -4,8 +4,8 @@ const express = require('express')
 const app = express()
 const db = require('./config/dbConnection')
 
-db.on("error", () => console.log("Erro na conexão."))
-db.once("open", () => console.log("Conectado ao banco."))
+db.on("error", () => console.error("Connection error"))
+db.once("open", () => console.log("Connected to mongoDB."))
 
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
