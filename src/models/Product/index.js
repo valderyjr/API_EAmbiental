@@ -2,13 +2,13 @@ const mongoose = require('mongoose')
 
 const productSchema = new mongoose.Schema(
 	{
-		name: {type: String, required: true},
-		companyName: {type: String, required: true},
-		price: {type: Number, required: true},
-		imageURL: {type: String, required: true},
-		category: {type: String, required: true},
-		description: {type: String, required: true},
-		ecologicalLabels: {type: [String], required: true}
+		name: {type: String, required: [true, 'Name is required!']},
+		companyName: {type: String, required: [true, 'Company name is required!']},
+		price: {type: Number, required: [true, 'Price is required!'], min: [0.1, 'Price cannot be negative or zero!']},
+		imageURL: {type: String, required: [true, 'Image is required!']},
+		category: {type: String, required: [true, 'Category is required!']},
+		description: {type: String, required: [true, 'Description is required!']},
+		ecologicalLabels: {type: [String], required: [true, 'Ecological labels are required!']}
 	}
 )
 
