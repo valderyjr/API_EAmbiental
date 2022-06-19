@@ -16,6 +16,11 @@ const productSchema = new mongoose.Schema(
 	}
 )
 
+productSchema.pre('save', function () {
+	const newEcologicalLabels = this.ecologicalLabels.join('').split(',')
+	this.ecologicalLabels = newEcologicalLabels
+})
+
 const Product = mongoose.model('Product', productSchema)
 
 module.exports = Product
