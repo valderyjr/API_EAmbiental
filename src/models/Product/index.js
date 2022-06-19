@@ -15,14 +15,9 @@ const productSchema = new mongoose.Schema(
 		},
 		category: {type: mongoose.Schema.Types.ObjectId, ref: 'categories', required: [true, 'Category is required!']},
 		description: {type: String, required: [true, 'Description is required!']},
-		ecologicalLabels: {type: [String], required: [true, 'Ecological labels are required!']}
+		ecologicalLabels: {type: [mongoose.Schema.Types.ObjectId], ref: "eco-labels"}
 	}
 )
-
-productSchema.pre('save', function () {
-	const newEcologicalLabels = this.ecologicalLabels.join('').split(',')
-	this.ecologicalLabels = newEcologicalLabels
-})
 
 productSchema.pre("remove", function () {
 	const {imageKey} = this.image

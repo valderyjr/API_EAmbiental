@@ -65,13 +65,14 @@ class EcologicalLabelsController {
 			const {id} = req.params
 			const {body: newData} = req
 
-			const dataImage = {
-				imageURL: req.file.location,
-				imageName: req.file.originalname,
-				imageKey: req.file.key
+			if (req.file) {
+				const dataImage = {
+					imageURL: req.file.location,
+					imageName: req.file.originalname,
+					imageKey: req.file.key
+				}	
+				newData.image = dataImage
 			}
-
-			newData.image = dataImage
 
 			const updatedEcoLabel = await ecoLabelsModel.findByIdAndUpdate(id, newData, {new: true})
 

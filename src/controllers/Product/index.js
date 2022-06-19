@@ -6,6 +6,11 @@ class ProductController {
 	static register = async (req, res) => {
 		try {
 			const {body: dataProduct} = req
+
+			const {ecologicalLabels} = dataProduct
+			const newEcoLabels = ecologicalLabels.split(',')
+
+			dataProduct.ecologicalLabels = newEcoLabels
 			
 			const dataImage = {
 				imageURL: req.file.location,
@@ -66,13 +71,15 @@ class ProductController {
 			const {id} = req.params
 			const {body: newData} = req
 
-			const dataImage = {
-				imageURL: req.file.location,
-				imageName: req.file.originalname,
-				imageKey: req.file.key
+			if (req.file) {
+				const dataImage = {
+					imageURL: req.file.location,
+					imageName: req.file.originalname,
+					imageKey: req.file.key
+				}
+	
+				newData.image = dataImage
 			}
-
-			newData.image = dataImage
 
 			const updatedProduct = await productModel.findByIdAndUpdate(id, newData, {new: true})
 
