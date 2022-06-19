@@ -28,6 +28,7 @@ module.exports = {
 			'image/jpeg',
 			'image/pjpeg',
 			'image/png',
+			'image/svg+xml'
 		]
 		if (allowedMimes.includes(file.mimetype)) {
 			cb(null, true);

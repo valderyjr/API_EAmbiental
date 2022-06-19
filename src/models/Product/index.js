@@ -13,7 +13,7 @@ const productSchema = new mongoose.Schema(
 			imageName: String,
 			imageKey: String
 		},
-		category: {type: String, required: [true, 'Category is required!']},
+		category: {type: mongoose.Schema.Types.ObjectId, ref: 'categories', required: [true, 'Category is required!']},
 		description: {type: String, required: [true, 'Description is required!']},
 		ecologicalLabels: {type: [String], required: [true, 'Ecological labels are required!']}
 	}
