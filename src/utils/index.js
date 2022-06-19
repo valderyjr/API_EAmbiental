@@ -6,7 +6,7 @@ const itNotExists = (res, name, getAll = false) => {
 }
 
 const responseError = (res, statusCode, error, message) => {
-	return res.status(400).json({
+	return res.status(statusCode).json({
 		message: message,
 		error: error.message
 	})

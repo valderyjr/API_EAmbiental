@@ -34,7 +34,9 @@ class ProductController {
 
 	static getAll = async (req, res) => {
 		try {
-			const allProducts = await productModel.find().populate({path: "category", model: "Category"})
+			const allProducts = await productModel.find()
+			.populate({path: "category", model: "Category"})
+			.populate({path: "ecologicalLabels", model:"eco-labels"})
 
 			return allProducts.length > 0 ? 
 			res.status(200).json({
@@ -52,7 +54,9 @@ class ProductController {
 	static getOne = async (req, res) => {
 		try {
 			const {id} = req.params
-			const product = await productModel.findById(id).populate({path: "category", model: "Category"})
+			const product = await productModel.findById(id)
+			.populate({path: "category", model: "Category"})
+			.populate({path: "ecologicalLabels", model:"eco-labels"})
 
 			return product ?
 			res.status(200).json({
