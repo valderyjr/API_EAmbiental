@@ -1,12 +1,21 @@
 const productModel = require ('../../models/Product')
+const {itNotExists} = require('../../utils')
 
 class ProductController {
 
 	static register = async (req, res) => {
 		try {
 			const {body: dataProduct} = req
-			const newProduct = new productModel(dataProduct)
+			
+			const dataImage = {
+				imageURL: req.file.location,
+				imageName: req.file.originalname,
+				imageKey: req.file.key
+			}
 
+			dataProduct.image = dataImage
+			const newProduct = new productModel(dataProduct)
+			
 			await newProduct.save()
 
 			return res.status(201).json({
@@ -43,10 +52,13 @@ class ProductController {
 			const {id} = req.params
 			const product = await productModel.findById(id)
 
-			return res.status(200).json({
+			return product ?
+			res.status(200).json({
 				message: "This is your product",
 				data: product
 			})
+			:
+			itNotExists(res, 'product')
 		} catch (error) {
 			return res.status(400).json({
 				message: "An error occurred while trying to get this product",
@@ -62,10 +74,13 @@ class ProductController {
 
 			const updatedProduct = await productModel.findByIdAndUpdate(id, newData, {new: true})
 
-			return res.status(200).json({
+			updatedProduct ? 
+			res.status(200).json({
 				message: "This is your updated product",
 				data: updatedProduct
-			})
+			}) 
+			:
+			itNotExists(res, 'product') 
 		} catch (error) {
 			return res.status(400).json({
 				message: "An error occurred while trying to update this product",
