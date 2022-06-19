@@ -5,6 +5,13 @@ const itNotExists = (res, name, getAll = false) => {
 	})
 }
 
+const responseError = (res, statusCode, error, message) => {
+	return res.status(400).json({
+		message: message,
+		error: error.message
+	})
+}
 module.exports = {
-	itNotExists
+	itNotExists,
+	responseError
 }

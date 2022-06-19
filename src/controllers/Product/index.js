@@ -1,5 +1,5 @@
 const productModel = require ('../../models/Product')
-const {itNotExists} = require('../../utils')
+const {itNotExists, responseError} = require('../../utils')
 
 class ProductController {
 
@@ -23,10 +23,7 @@ class ProductController {
 				data: newProduct
 			})
 		} catch (error) {
-			return res.status(400).json({
-				message: "An error occurred while trying to create this product",
-				error: error.message
-			})
+			responseError(res, 400, error, "An error occurred while trying to create this product")
 		}
 	}
 
@@ -43,10 +40,7 @@ class ProductController {
 			itNotExists(res, 'products', true)
 
 		} catch (error) {
-			return res.status(400).json({
-				message: "An error occurred while trying to get all products",
-				error: error.message
-			})
+			responseError(res, 400, error, "An error occurred while trying to get all products")
 		}
 	}
 
@@ -63,10 +57,7 @@ class ProductController {
 			:
 			itNotExists(res, 'product')
 		} catch (error) {
-			return res.status(400).json({
-				message: "An error occurred while trying to get this product",
-				error: error.message
-			})
+			responseError(res, 400, error, "An error occurred while trying to get this product")
 		}
 	}
 
@@ -93,10 +84,7 @@ class ProductController {
 			:
 			itNotExists(res, 'product') 
 		} catch (error) {
-			return res.status(400).json({
-				message: "An error occurred while trying to update this product",
-				error: error.message
-			})
+			responseError(res, 400, error, "An error occurred while trying to update this product")
 		}
 	}
 
@@ -115,10 +103,7 @@ class ProductController {
 			itNotExists(res, 'product') 
 
 		} catch (error) {
-			return res.status(400).json({
-				message: "An error occurred while trying to delete this product",
-				error: error.message
-			})
+			responseError(res, 400, error, "An error occurred while trying to delete this product")
 		}
 	}
 }

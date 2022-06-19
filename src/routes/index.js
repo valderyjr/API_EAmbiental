@@ -1,4 +1,5 @@
 const productRoutes = require ('./Product')
+const categoryRoutes = require ('./Category')
 
 const routes = (app) => {
 	app.route('/').get((req, res) => {
@@ -6,6 +7,7 @@ const routes = (app) => {
 	})
 
 	app.use('/products', productRoutes)
+	app.use('/categories', categoryRoutes)
 }
 
 module.exports = routes
