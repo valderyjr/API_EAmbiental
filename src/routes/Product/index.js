@@ -6,8 +6,7 @@ const multerConfig = require('../../config/multer')
 router.get('/', ProductController.getAll)
 router.get('/:id', ProductController.getOne)
 router.post('/', multer(multerConfig).single('file'), ProductController.register)
-// router.post('/', ProductController.register)
-router.put('/:id', ProductController.updateOne)
+router.put('/:id', multer(multerConfig).single('file'), ProductController.updateOne)
 router.delete('/:id', ProductController.deleteOne)
 
 module.exports = router

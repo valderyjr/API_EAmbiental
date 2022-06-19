@@ -15,7 +15,7 @@ class ProductController {
 
 			dataProduct.image = dataImage
 			const newProduct = new productModel(dataProduct)
-			
+
 			await newProduct.save()
 
 			return res.status(201).json({
@@ -34,10 +34,13 @@ class ProductController {
 		try {
 			const allProducts = await productModel.find()
 
-			return res.status(200).json({
+			return allProducts.length > 0 ? 
+			res.status(200).json({
 				message: "These are all products",
 				data: allProducts
 			})
+			:
+			itNotExists(res, 'products', true)
 
 		} catch (error) {
 			return res.status(400).json({
@@ -72,6 +75,14 @@ class ProductController {
 			const {id} = req.params
 			const {body: newData} = req
 
+			const dataImage = {
+				imageURL: req.file.location,
+				imageName: req.file.originalname,
+				imageKey: req.file.key
+			}
+
+			newData.image = dataImage
+
 			const updatedProduct = await productModel.findByIdAndUpdate(id, newData, {new: true})
 
 			updatedProduct ? 
@@ -93,11 +104,16 @@ class ProductController {
 		try {
 			const {id} = req.params
 
-			await productModel.findByIdAndDelete(id)
-			
-			return res.status(200).json({
+			const productToDelete = await productModel.findById(id)
+
+			return productToDelete ? 
+			productToDelete.remove() &
+			res.status(200).json({
 				message: "This product was deleted!"
 			})
+			:
+			itNotExists(res, 'product') 
+
 		} catch (error) {
 			return res.status(400).json({
 				message: "An error occurred while trying to delete this product",
