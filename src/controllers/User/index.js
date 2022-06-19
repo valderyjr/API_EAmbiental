@@ -1,6 +1,7 @@
 const userModel = require ('../../models/User')
 const {itNotExists, responseError} = require('../../utils')
 const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
 
 class UserController {
 
@@ -16,13 +17,13 @@ class UserController {
 				responseError(res, 409, error, "This user already exists!")
 				return 
 			}
-			// const dataImage = {
-			// 	imageURL: req.file.location,
-			// 	imageName: req.file.originalname,
-			// 	imageKey: req.file.key
-			// }
+			const dataImage = {
+				imageURL: req.file.location,
+				imageName: req.file.originalname,
+				imageKey: req.file.key
+			}
 
-			// dataUser.image = dataImage
+			dataUser.image = dataImage
 			const newUser = new userModel({
 				...dataUser,
 				password: bcrypt.hashSync(dataUser.password, 10)
@@ -36,7 +37,8 @@ class UserController {
 					id: newUser.id,
 					name: newUser.name,
 					email: newUser.name,
-					isAdmin: newUser.admin
+					isAdmin: newUser.isAdmin,
+					image: newUser.image
 				}
 			})
 		} catch (error) {
@@ -147,10 +149,24 @@ class UserController {
 				return
 			}
 
+			const token = jwt.sign({
+				id: userExists.id,
+				email: userExists.email,
+				name: userExists.name,
+				isAdmin: userExists.isAdmin
+			},
+			process.env.JWT_KEY,
+			{
+				expiresIn: "1h"
+			}
+			)
+
 			const user = {
 				id: userExists.id,
 				email: userExists.email,
-				name: userExists.name
+				name: userExists.name,
+				isAdmin: userExists.isAdmin,
+				token: token
 			}
 
 			return res.status(200).json({

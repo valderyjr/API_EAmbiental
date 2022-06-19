@@ -11,6 +11,7 @@ const responseError = (res, statusCode, error, message) => {
 		error: error.message
 	})
 }
+
 module.exports = {
 	itNotExists,
 	responseError
