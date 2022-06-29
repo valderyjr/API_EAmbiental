@@ -37,7 +37,19 @@ const isAdmin = (req, res, next) => {
 	}
 }
 
+const isAuthOrAdmin = (req, res, next) => {
+	try {
+		if (req.user || req.user.isAdmin) {
+			return next()
+		}
+		return responseError(res, 401, error, 'You are not authorized.')
+	} catch (error) {
+		return responseError(res, 401, error, 'You are not authorized.')
+	}
+}
+
 module.exports = {
 	isAuth,
-	isAdmin
+	isAdmin,
+	isAuthOrAdmin
 }

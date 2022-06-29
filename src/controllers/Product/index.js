@@ -33,10 +33,30 @@ class ProductController {
 	}
 
 	static getAll = async (req, res) => {
+		const {name} = req.query
+		const {category} = req.query
+		const regexName = new RegExp(name, 'gi');
 		try {
-			const allProducts = await productModel.find()
-			.populate({path: "category", model: "Category"})
-			.populate({path: "ecologicalLabels", model:"eco-labels"})
+			let allProducts
+			if (!category) {
+				allProducts = await productModel.find({
+					name: {
+						$regex: regexName
+					}
+				})
+				.populate({path: "category", model: "Category"})
+				.populate({path: "ecologicalLabels", model:"eco-labels"})
+			} else {
+				allProducts = await productModel.find({
+					name: {
+						$regex: regexName
+					},
+					category: category
+				})
+				.populate({path: "category", model: "Category"})
+				.populate({path: "ecologicalLabels", model:"eco-labels"})
+			}
+			
 
 			return allProducts.length > 0 ? 
 			res.status(200).json({
@@ -47,6 +67,7 @@ class ProductController {
 			itNotExists(res, 'products', true)
 
 		} catch (error) {
+			console.log(error)
 			responseError(res, 400, error, "An error occurred while trying to get all products")
 		}
 	}

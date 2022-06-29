@@ -47,8 +47,15 @@ class UserController {
 	}
 
 	static getAll = async (req, res) => {
+		const {name} = req.query
+		const regexName = new RegExp(name, 'gi');
 		try {
-			const allUsers = await userModel.find().select('-password')
+			const allUsers = await userModel.find({
+				name: {
+					$regex: regexName
+				},
+				isAdmin: false
+			}).select('-password')
 
 			return allUsers.length > 0 ? 
 			res.status(200).json({
